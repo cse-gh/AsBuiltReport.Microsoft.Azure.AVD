@@ -13,7 +13,7 @@ Development repo for adding Azure Virtual Desktop (AVD) reporting functions to t
 | PR target | `dev` branch |
 | Current version | **0.1.1** — InfoLevel 3/4 expansion, validated against live environment |
 | PowerShell | 7+ required (`pwsh`, not `powershell.exe`) |
-| Related project brief | `C:\Users\scott.eno\Infrastructure\storage\Reporting\AsBuiltReport\TODO-AVD-Module.md` |
+| Related project brief | See `TODO-AVD-Module.md` in the companion Infrastructure repo (`storage/Reporting/AsBuiltReport/`) |
 
 ## Parent Module Reference
 
