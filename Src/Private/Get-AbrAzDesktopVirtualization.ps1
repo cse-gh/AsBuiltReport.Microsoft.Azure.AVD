@@ -129,29 +129,26 @@ function Get-AbrAzDesktopVirtualization {
                                         # Registration Info (InfoLevel 3+)
                                         if ($InfoLevel.DesktopVirtualization -ge 3) {
                                             $RegInfo = $AzHostPool.RegistrationInfoExpirationTime
-                                            $RegToken = $AzHostPool.RegistrationInfoToken
-                                            if ($RegInfo -or $RegToken) {
-                                                Section -Style NOTOCHeading6 -ExcludeFromTOC 'Registration Info' {
-                                                    $TokenStatus = if ($RegInfo) {
-                                                        if ([datetime]$RegInfo -lt (Get-Date)) { 'Expired' } else { 'Valid' }
-                                                    } else { 'No Token' }
-                                                    $RegObj = [PSCustomObject][Ordered]@{
-                                                        'Expiration Time' = if ($RegInfo) { ([datetime]$RegInfo).ToString('yyyy-MM-dd HH:mm') } else { '--' }
-                                                        'Token Status' = $TokenStatus
-                                                    }
-                                                    if ($Healthcheck.DesktopVirtualization.RegistrationExpiry) {
-                                                        $RegObj | Where-Object { $_.'Token Status' -eq 'Expired' } | Set-Style -Style Warning -Property 'Token Status'
-                                                    }
-                                                    $TableParams = @{
-                                                        Name = "Registration - $($AzHostPool.Name)"
-                                                        List = $true
-                                                        ColumnWidths = 40, 60
-                                                    }
-                                                    if ($Report.ShowTableCaptions) {
-                                                        $TableParams['Caption'] = "- $($TableParams.Name)"
-                                                    }
-                                                    $RegObj | Table @TableParams
+                                            Section -Style NOTOCHeading6 -ExcludeFromTOC 'Registration Info' {
+                                                $TokenStatus = if ($RegInfo) {
+                                                    if ([datetime]$RegInfo -lt (Get-Date)) { 'Expired' } else { 'Valid' }
+                                                } else { 'No Active Token' }
+                                                $RegObj = [PSCustomObject][Ordered]@{
+                                                    'Expiration Time' = if ($RegInfo) { ([datetime]$RegInfo).ToString('yyyy-MM-dd HH:mm') } else { '--' }
+                                                    'Token Status' = $TokenStatus
                                                 }
+                                                if ($Healthcheck.DesktopVirtualization.RegistrationExpiry) {
+                                                    $RegObj | Where-Object { $_.'Token Status' -eq 'Expired' } | Set-Style -Style Warning -Property 'Token Status'
+                                                }
+                                                $TableParams = @{
+                                                    Name = "Registration - $($AzHostPool.Name)"
+                                                    List = $true
+                                                    ColumnWidths = 40, 60
+                                                }
+                                                if ($Report.ShowTableCaptions) {
+                                                    $TableParams['Caption'] = "- $($TableParams.Name)"
+                                                }
+                                                $RegObj | Table @TableParams
                                             }
                                         }
 
