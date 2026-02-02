@@ -11,7 +11,7 @@ Development repo for adding Azure Virtual Desktop (AVD) reporting functions to t
 | GitHub repo | `https://github.com/cse-gh/AsBuiltReport.Microsoft.Azure.AVD` |
 | Upstream | `https://github.com/AsBuiltReport/AsBuiltReport.Microsoft.Azure` |
 | PR target | `dev` branch |
-| Current version | **0.1.0** — single consolidated function, validated against live environment |
+| Current version | **0.1.1** — InfoLevel 3/4 expansion, validated against live environment |
 | PowerShell | 7+ required (`pwsh`, not `powershell.exe`) |
 | Related project brief | `C:\Users\scott.eno\Infrastructure\storage\Reporting\AsBuiltReport\TODO-AVD-Module.md` |
 
@@ -103,6 +103,24 @@ Write-PScriboMessage "msg"                                  # Console logging (n
 
 ## Version History
 
+### v0.1.1 (2026-02-02) — InfoLevel 3/4 expansion
+
+Added meaningful content at every InfoLevel tier, validated against live AVD environment:
+
+**InfoLevel 3 additions:**
+- **Host Pools**: Registration token info (expiry date/status, always shows even when no active token)
+- **Application Groups**: Per-app-group detail sections with published applications list (`Get-AzWvdApplication` for RemoteApp groups)
+- **Scaling Plans**: Per-plan detail sections with schedule breakdowns (ramp-up/peak/ramp-down/off-peak hours, capacity thresholds)
+
+**InfoLevel 4 additions:**
+- **Session Hosts**: Per-session-host vertical detail sections with OS version, VM resource ID, update state/error, expanded health checks
+- **Active Sessions**: Per-host-pool user session listing (`Get-AzWvdUserSession`) — session state, create time, application type
+
+**New health checks:**
+- No Session Hosts (bold WARNING paragraph when host pool has zero session hosts)
+- Host Pool at Capacity (bold WARNING when total sessions >= max capacity)
+- Registration Token Expired (Warning style on token status)
+
 ### v0.1.0 (2026-02-02) — Initial working version
 
 Single consolidated function `Get-AbrAzDesktopVirtualization` covering all AVD resource types:
@@ -112,12 +130,6 @@ Single consolidated function `Get-AbrAzDesktopVirtualization` covering all AVD r
 - **Scaling Plans**: Table with host pool associations (none in current environment)
 - **Health checks**: Session host status (Warning if not Available), drain mode (Warning if disabled)
 - **Tag handling**: Uses `.Keys` and `.AdditionalProperties[]` for AVD's `TrackedResourceTags` type (not standard hashtable)
-
-**Integration into parent module requires:**
-1. Copy `Src/Private/Get-AbrAzDesktopVirtualization.ps1` → module's `Src/Private/`
-2. Add `"DesktopVirtualization" = "Get-AbrAzDesktopVirtualization"` to `$SectionFunctionMap` in orchestrator
-3. Add `"DesktopVirtualization"` to `$DefaultSectionOrder` in orchestrator
-4. Add `DesktopVirtualization` entries to module's built-in JSON: `SectionOrder`, `InfoLevel`, `HealthCheck`
 
 ## AVD Functions to Implement
 
