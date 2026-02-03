@@ -1,4 +1,4 @@
-# AsBuiltReport.Microsoft.Azure.AVD
+# Get-AbrAzDesktopVirtualization.ps1
 
 Development repo for adding Azure Virtual Desktop (AVD) reporting to the [AsBuiltReport.Microsoft.Azure](https://github.com/AsBuiltReport/AsBuiltReport.Microsoft.Azure) module. The code here will be contributed upstream via PR.
 
